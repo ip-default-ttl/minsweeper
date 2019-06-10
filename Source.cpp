@@ -8,6 +8,7 @@ inline void message1();
 inline void message2();
 inline void main_help();
 inline void PascalABCnet();
+inline void ingame_help();
 
 class pole
 {
@@ -99,7 +100,7 @@ public:
                 }
                 case 11:
                 {
-                    cout << "  *  ";
+                    cout << "  ^  ";
                     break;
                 }
                 default:
@@ -155,7 +156,21 @@ public:
             }
         }
     }
-    inline void game()
+
+    inline bool check()
+    {
+        bool bl = true;
+        for (int i = 1; i < length + 1; i++)
+        {
+            for (int j = 1; j < width + 1; j++)
+            {
+                if (tabl[i][j] == 9)
+                    bl = false;
+            }
+        }
+        return bl;
+    }
+    inline bool game()
     {
         string com;
         bool win = false;
@@ -164,22 +179,81 @@ public:
         while (!(com == "stop"))
         {
             out();
-            cout << "game";
+            cout << "game>>>";
             cin >> com;
             if (com == "-m")
             {
+                cin >> d >> d1;
+                if ((d <= width) && (d >= 1) && (d1 <= length) && (d1 >= 1))
+                {
+                    tabl[d1][d] = 11;
+                    if ((tabl[d1 - 1][d - 1] < 9) && (tabl[d1 - 1][d - 1] < 9))
+                        tabl[d1 - 1][d - 1]--;
+                    if ((tabl[d1 - 1][d] < 9) && (tabl[d1 - 1][d] < 9))
+                        tabl[d1 - 1][d]--;
+                    if ((tabl[d1 - 1][d + 1] < 9) && (tabl[d1 - 1][d + 1] < 9))
+                        tabl[d1 - 1][d + 1]--;
+                    if ((tabl[d1 + 1][d - 1] < 9) && (tabl[d1 + 1][d - 1] < 9))
+                        tabl[d1 + 1][d - 1]--;
+                    if ((tabl[d1 + 1][d] < 9) && (tabl[d1 + 1][d] < 9))
+                        tabl[d1 + 1][d]--;
+                    if ((tabl[d1 + 1][d + 1] < 9) && (tabl[d1 + 1][d + 1] < 9))
+                        tabl[d1 + 1][d + 1]--;
+                    if ((tabl[d1][d + 1] < 9) && (tabl[d1][d + 1] < 9))
+                        tabl[d1][d + 1]--;
+                    if ((tabl[d1][d - 1] < 9) && (tabl[d1][d - 1] < 9))
+                        tabl[d1][d - 1]--;
+                }
+            }
+            if (com == "-d")
+            {
+                cin >> d >> d1;
+                if (tabl[d1][d] == 11)
+                {
+                    tabl[d1][d] = 9;
+                    if ((tabl[d1 - 1][d - 1] < 9) && (tabl[d1 - 1][d - 1] < 9))
+                        tabl[d1 - 1][d - 1]++;
+                    if ((tabl[d1 - 1][d] < 9) && (tabl[d1 - 1][d] < 9))
+                        tabl[d1 - 1][d]++;
+                    if ((tabl[d1 - 1][d + 1] < 9) && (tabl[d1 - 1][d + 1] < 9))
+                        tabl[d1 - 1][d + 1]++;
+                    if ((tabl[d1 + 1][d - 1] < 9) && (tabl[d1 + 1][d - 1] < 9))
+                        tabl[d1 + 1][d - 1]++;
+                    if ((tabl[d1 + 1][d] < 9) && (tabl[d1 + 1][d] < 9))
+                        tabl[d1 + 1][d]++;
+                    if ((tabl[d1 + 1][d + 1] < 9) && (tabl[d1 + 1][d + 1] < 9))
+                        tabl[d1 + 1][d + 1]++;
+                    if ((tabl[d1][d + 1] < 9) && (tabl[d1][d + 1] < 9))
+                        tabl[d1][d + 1]++;
+                    if ((tabl[d1][d - 1] < 9) && (tabl[d1][d - 1] < 9))
+                        tabl[d1][d - 1]++;
+                }
             }
             if (com == "-e")
             {
+                cin >> d >> d1;
+                if (tabl[d1][d] == 9)
+                {
+                    if (htabl[d1][d] == -1)
+                    {
+                        cout << "Вы проиграли!" << endl;
+                        return false;
+                    }
+                    else
+                        tabl[d1][d] = htabl[d1][d];
+                }
             }
             if ((com == "--h") || (com == "help"))
             {
+                ingame_help();
             }
             if (com == "-h")
             {
                 cin >> d >> d1;
-                tabl[d][d1] = 10;
+                tabl[d1][d] = 10;
             }
+            if (check() == true)
+                return true;
         }
     }
 };
@@ -198,11 +272,17 @@ int main()
             int f = 0;
             int f1 = 0;
             int f2 = 0;
+            cout << "Введите размеры поля и кол-во мин" << endl;
             cin >> f >> f1 >> f2;
             pole A(f, f1, f2);
             A.mines();
             A.calculate();
-            A.game();
+            win = A.game();
+            if (win == true)
+            {
+                cout << "вы победили!!" << endl;
+                return 0;
+            }
         }
         if (command == "help")
         {
@@ -222,6 +302,7 @@ inline void message1()
     cout << "----------------------------------------------------------------------------------" << endl;
     cout << "|                      Welcome to Conslole minesweeper                           |" << endl;
     cout << "----------------------------------------------------------------------------------" << endl;
+    cout << "Введите help для вывода списка команд" << endl;
 }
 
 inline void message2()
@@ -278,4 +359,16 @@ er:
         goto er;
     }
     }
+}
+
+inline void ingame_help()
+{
+    string a;
+    cout << "Список флагов для игры:" << endl;
+    cout << "1) -e [x] [y] - установка пустой позиции" << endl;
+    cout << "2) -m [x] [y] - установка мины" << endl;
+    cout << "3) -d [x] [y] - удалить мину" << endl;
+    cout << "4) -h [x] [y] - точка сомнения" << endl;
+    cout << "Введите y чтобы продолжить" << endl;
+    cin >> a;
 }
