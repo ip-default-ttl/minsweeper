@@ -157,6 +157,42 @@ public:
         }
     }
 
+    /* inline void zeros(int a, int b)
+    {
+        if (tabl[a - 1][b - 1] == 9)
+        {
+            tabl[a - 1][b - 1] = htabl[a - 1][b - 1];
+        }
+        if (tabl[a - 1][b] == 9)
+        {
+            tabl[a - 1][b] = htabl[a - 1][b];
+        }
+        if (tabl[a - 1][b + 1] == 9)
+        {
+            tabl[a - 1][b + 1] = htabl[a - 1][b + 1];
+        }
+        if (tabl[a][b + 1] == 9)
+        {
+            tabl[a][b + 1] = htabl[a][b + 1];
+        }
+        if (tabl[a][b - 1] == 9)
+        {
+            tabl[a][b - 1] = htabl[a][b - 1];
+        }
+        if (tabl[a + 1][b - 1] == 9)
+        {
+            tabl[a + 1][b - 1] = htabl[a + 1][b - 1];
+        }
+        if (tabl[a + 1][b] == 9)
+        {
+            tabl[a + 1][b] = htabl[a + 1][b];
+        }
+        if (tabl[a + 1][b - 1] == 9)
+        {
+            tabl[a + 1][b + 1] = htabl[a + 1][b + 1];
+        }
+    }*/
+
     inline bool check()
     {
         bool bl = true;
@@ -184,7 +220,7 @@ public:
             if (com == "-m")
             {
                 cin >> d >> d1;
-                if ((d <= width) && (d >= 1) && (d1 <= length) && (d1 >= 1))
+                if ((d <= width) && (d >= 1) && (d1 <= length) && (d1 >= 1)&&((tabl[d1][d]==9)||(tabl[d1][d]==10)))
                 {
                     tabl[d1][d] = 11;
                     if ((tabl[d1 - 1][d - 1] < 9) && (tabl[d1 - 1][d - 1] < 9))
@@ -232,7 +268,7 @@ public:
             if (com == "-e")
             {
                 cin >> d >> d1;
-                if (tabl[d1][d] == 9)
+                if ((tabl[d1][d] == 9)||(tabl[d1][d]==10))
                 {
                     if (htabl[d1][d] == -1)
                     {
@@ -240,7 +276,27 @@ public:
                         return false;
                     }
                     else
+                    {
                         tabl[d1][d] = htabl[d1][d];
+                    if (tabl[d1 - 1][d - 1] == 11)
+                        tabl[d1][d]--;
+                    if (tabl[d1 - 1][d] == 11) 
+                        tabl[d1][d]--;
+                    if (tabl[d1 - 1][d + 1] == 11)
+                        tabl[d1][d]--;
+                    if (tabl[d1 + 1][d - 1] == 11)
+                        tabl[d1][d]--;
+                    if (tabl[d1 + 1][d] == 11)
+                        tabl[d1][d]--;
+                    if (tabl[d1 + 1][d + 1] == 11)
+                        tabl[d1][d]--;
+                    if (tabl[d1][d + 1] == 11)
+                        tabl[d1][d]--;
+                    if (tabl[d1][d - 1] == 11)
+                        tabl[d1][d]--;
+                    }
+                    /*if (tabl[d1][d] == 0)
+                        zeros(d1,d);*/
                 }
             }
             if ((com == "--h") || (com == "help"))
@@ -278,11 +334,6 @@ int main()
             A.mines();
             A.calculate();
             win = A.game();
-            if (win == true)
-            {
-                cout << "вы победили!!" << endl;
-                return 0;
-            }
         }
         if (command == "help")
         {
